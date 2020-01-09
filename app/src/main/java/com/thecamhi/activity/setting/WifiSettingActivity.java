@@ -1,9 +1,5 @@
 package com.thecamhi.activity.setting;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -16,21 +12,19 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
 import com.hichip.R;
 import com.hichip.callback.ICameraIOSessionCallback;
@@ -47,6 +41,10 @@ import com.thecamhi.main.HiActivity;
 import com.thecamhi.main.MainActivity;
 import com.thecamhi.utils.EmojiFilter;
 import com.thecamhi.utils.SpcialCharFilter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class WifiSettingActivity extends HiActivity implements ICameraIOSessionCallback,OnItemClickListener,OnClickListener{
 
@@ -168,7 +166,7 @@ public class WifiSettingActivity extends HiActivity implements ICameraIOSessionC
 					Bundle bundle = msg.getData();
 					byte[] data = bundle.getByteArray(HiDataValue.EXTRAS_KEY_DATA);
 					switch (msg.arg1) {
-					//获取wifi信息回调
+					//鑾峰彇wifi淇℃伅鍥炶皟
 					case HiChipDefines.HI_P2P_GET_WIFI_PARAM:
 						wifi_param = new HiChipDefines.HI_P2P_S_WIFI_PARAM(data);
 
@@ -196,7 +194,7 @@ public class WifiSettingActivity extends HiActivity implements ICameraIOSessionC
 
 
 						break;
-						//获取wifi列表回调
+						//鑾峰彇wifi鍒楄〃鍥炶皟
 					case HiChipDefines.HI_P2P_GET_WIFI_LIST:
 
 						int cnt = Packet.byteArrayToInt_Little(data,0);

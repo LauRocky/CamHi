@@ -1,28 +1,6 @@
 package com.thecamhi.activity;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-
-import com.hichip.R;
-import com.hichip.base.HiLog;
-import com.hichip.callback.ICameraIOSessionCallback;
-import com.hichip.callback.ICameraPlayStateCallback;
-import com.hichip.content.HiChipDefines;
-import com.hichip.content.HiChipDefines.HI_P2P_WHITE_LIGHT_INFO;
-import com.hichip.content.HiChipDefines.HI_P2P_WHITE_LIGHT_INFO_EXT;
-import com.hichip.control.HiCamera;
-import com.hichip.sdk.HiChipP2P;
-import com.hichip.tools.Packet;
-import com.thecamhi.base.HiToast;
-import com.thecamhi.base.HiTools;
-import com.thecamhi.base.MyLiveViewGLMonitor;
-import com.thecamhi.bean.HiDataValue;
-import com.thecamhi.bean.MyCamera;
-import com.thecamhi.main.HiActivity;
-import com.thecamhi.model.LiveViewModel;
-
 import android.Manifest;
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -61,6 +39,27 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.hichip.R;
+import com.hichip.base.HiLog;
+import com.hichip.callback.ICameraIOSessionCallback;
+import com.hichip.callback.ICameraPlayStateCallback;
+import com.hichip.content.HiChipDefines;
+import com.hichip.content.HiChipDefines.HI_P2P_WHITE_LIGHT_INFO;
+import com.hichip.content.HiChipDefines.HI_P2P_WHITE_LIGHT_INFO_EXT;
+import com.hichip.control.HiCamera;
+import com.hichip.sdk.HiChipP2P;
+import com.hichip.tools.Packet;
+import com.thecamhi.base.HiToast;
+import com.thecamhi.base.HiTools;
+import com.thecamhi.base.MyLiveViewGLMonitor;
+import com.thecamhi.bean.HiDataValue;
+import com.thecamhi.bean.MyCamera;
+import com.thecamhi.main.HiActivity;
+import com.thecamhi.model.LiveViewModel;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
 
 public class LiveViewActivity extends HiActivity
 		implements ICameraIOSessionCallback, ICameraPlayStateCallback, View.OnClickListener, OnTouchListener {
@@ -116,7 +115,7 @@ public class LiveViewActivity extends HiActivity
 	private int lightModel = 0;// 0 non ,1 HI_P2P_WHITE_LIGHT_GET_EXT ,2
 								// HI_P2P_WHITE_LIGHT_GET
 	private int action = 0;
-	private boolean isMF = false;// ¾µÏñºÍ·­×ªµÄ»Øµ÷±êÖ¾Î»
+	private boolean isMF = false;// é•œåƒå’Œç¿»è½¬çš„å›è°ƒæ ‡å¿—ä½
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +129,7 @@ public class LiveViewActivity extends HiActivity
 
 		// mApplication = (CamHiApplication) getApplication();
 
-		// Í¨¹ı±éÀúuid»ñÈ¡ÏàÓ¦µÄÉãÏñ»ú
+		// é€šè¿‡éå†uidè·å–ç›¸åº”çš„æ‘„åƒæœº
 		for (MyCamera camera : HiDataValue.CameraList) {
 			if (camera.getUid().equals(uid)) {
 				mCamera = camera;
@@ -140,10 +139,10 @@ public class LiveViewActivity extends HiActivity
 				mCamera.sendIOCtrl(HiChipDefines.HI_P2P_GET_DISPLAY_PARAM, null);
 				HiChipDefines.HI_P2P_S_MD_PARAM mdparam = new HiChipDefines.HI_P2P_S_MD_PARAM(0,
 						new HiChipDefines.HI_P2P_S_MD_AREA(HiChipDefines.HI_P2P_MOTION_AREA_1, 0, 0, 0, 0, 0, 0));
-				// »ñÈ¡ÒÆ¶¯Õì²â
+				// è·å–ç§»åŠ¨ä¾¦æµ‹
 				mCamera.sendIOCtrl(HiChipDefines.HI_P2P_GET_MD_PARAM, mdparam.parseContent());
 
-				// ÒôÆµ
+				// éŸ³é¢‘
 				// mCamera.sendIOCtrl(HiChipDefines.HI_P2P_GET_AUDIO_ATTR,
 				// null);
 
@@ -187,11 +186,11 @@ public class LiveViewActivity extends HiActivity
 
 		setContentView(R.layout.activity_live_view_landscape);
 
-		// ¼à¿ØµÄ¿Ø¼ş°ó¶¨camera
+		// ç›‘æ§çš„æ§ä»¶ç»‘å®šcamera
 		mMonitor = (MyLiveViewGLMonitor) findViewById(R.id.monitor_live_view);
 		mMonitor.setOnTouchListener(this);
 		mMonitor.setCamera(mCamera);
-		// ¿ªÊ¼²¥·Å
+		// å¼€å§‹æ’­æ”¾
 		mCamera.setLiveShowMonitor(mMonitor);
 
 		btn_live_exit = (ImageView) findViewById(R.id.btn_live_exit);
@@ -336,9 +335,9 @@ public class LiveViewActivity extends HiActivity
 				break;
 
 			case HiDataValue.HANDLE_MESSAGE_RECEIVE_IOCTRL: {
-				if (msg.arg2 == 0) {// ³É¹¦µÄ×´Ì¬Öµ
+				if (msg.arg2 == 0) {// æˆåŠŸçš„çŠ¶æ€å€¼
 					handReceiveIoCtrlSuccess(msg);
-				} else if (msg.arg2 == -1) {// Ê§°ÜµÄ×´Ì¬Öµ
+				} else if (msg.arg2 == -1) {// å¤±è´¥çš„çŠ¶æ€å€¼
 					switch (msg.arg1) {
 					case HiChipDefines.HI_P2P_SET_PTZ_PRESET:
 						if (LiveViewModel.getInstance().mFlagPreset == 1) {
@@ -350,12 +349,12 @@ public class LiveViewActivity extends HiActivity
 			}
 				break;
 
-			// ²¥·Å×´Ì¬
+			// æ’­æ”¾çŠ¶æ€
 			case HiDataValue.HANDLE_MESSAGE_PLAY_STATE:
 				Bundle bundle = msg.getData();
 				int command = bundle.getInt("command");
 				switch (command) {
-				// ½ÓÊÕµ½ÁË¿ªÊ¼µÄ×´Ì¬
+				// æ¥æ”¶åˆ°äº†å¼€å§‹çš„çŠ¶æ€
 				case ICameraPlayStateCallback.PLAY_STATE_START:
 
 					video_width = bundle.getInt("width");
@@ -367,12 +366,12 @@ public class LiveViewActivity extends HiActivity
 
 					break;
 
-				// ±¾µØÂ¼Ïñ¿ªÊ¼
+				// æœ¬åœ°å½•åƒå¼€å§‹
 				case ICameraPlayStateCallback.PLAY_STATE_RECORDING_START:
 					mRecordingState = RECORDING_STATUS_ING;
 					txt_recording.setVisibility(View.VISIBLE);
 					break;
-				// ±¾µØÂ¼Ïñ½áÊø
+				// æœ¬åœ°å½•åƒç»“æŸ
 				case ICameraPlayStateCallback.PLAY_STATE_RECORDING_END:
 					mRecordingState = RECORDING_STATUS_NONE;
 					txt_recording.setVisibility(View.GONE);
@@ -402,11 +401,11 @@ public class LiveViewActivity extends HiActivity
 				if (state == 1) {
 					HiToast.showToast(LiveViewActivity.this, getString(R.string.tips_preset_set_btn));
 				} else if (state == 2) {
-					// HiToast.showToast(LiveViewActivity.this, "µ÷ÓÃ³É¹¦À²");
+					// HiToast.showToast(LiveViewActivity.this, "è°ƒç”¨æˆåŠŸå•¦");
 				}
 				break;
 			case HiChipDefines.HI_P2P_GET_DISPLAY_PARAM:
-				if (isMF) {// ÎªÁË¹æ±ÜµÚÒ»´Î½øÀ´»¹Òª·¢ÉèÖÃµÄÇëÇó
+				if (isMF) {// ä¸ºäº†è§„é¿ç¬¬ä¸€æ¬¡è¿›æ¥è¿˜è¦å‘è®¾ç½®çš„è¯·æ±‚
 					if (display_param != null) {
 						mCamera.sendIOCtrl(HiChipDefines.HI_P2P_SET_DISPLAY_PARAM, display_param.parseContent());
 						dismissLoadingProgress();
@@ -448,7 +447,7 @@ public class LiveViewActivity extends HiActivity
 		}
 	};
 
-	// ±£´æ¹ú¿ÆµÄ¿ìÕÕ
+	// ä¿å­˜å›½ç§‘çš„å¿«ç…§
 	private void saveSnapshot(final Bitmap frame) {
 
 		new AsyncTask<Void, Void, Void>() {
@@ -589,7 +588,7 @@ public class LiveViewActivity extends HiActivity
 		case R.id.btn_live_preset:
 			//clickPreset((ImageView) v);
 
-			// Êı×Ö¼üÅÌÉèÖÃÔ¤ÖÃÎ»
+			// æ•°å­—é”®ç›˜è®¾ç½®é¢„ç½®ä½
 		    setUpPreset((ImageView) v);
 			break;
 		case R.id.resolution_ratio:
@@ -648,7 +647,7 @@ public class LiveViewActivity extends HiActivity
 
 	}
 
-	// ÉèÖÃÔ¤ÖÃÎ»
+	// è®¾ç½®é¢„ç½®ä½
 	private void setUpPreset(ImageView v) {
 		View numKeyBoard = getLayoutInflater().inflate(R.layout.popup_preset_key, null);
 		mPopupWindow = new PopupWindow(LiveViewActivity.this);
@@ -664,7 +663,7 @@ public class LiveViewActivity extends HiActivity
 		v.getLocationOnScreen(location);
 		int offsety = HiTools.dip2px(this, 90);
 		mPopupWindow.showAtLocation(v, 0, location[0] - offsetx, offsety - location[1]);
-		// ´¦Àí¼üÅÌµÄÂß¼­
+		// å¤„ç†é”®ç›˜çš„é€»è¾‘
 		LiveViewModel.getInstance().handKeyBoard(LiveViewActivity.this, numKeyBoard, mCamera);
 
 	}
@@ -707,7 +706,7 @@ public class LiveViewActivity extends HiActivity
 
 			// int n = event.getAction();
 			if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_DOWN && 2 == nCnt)// <span
-																												// style="color:#ff0000;">2±íÊ¾Á½¸öÊÖÖ¸</span>
+																												// style="color:#ff0000;">2è¡¨ç¤ºä¸¤ä¸ªæ‰‹æŒ‡</span>
 			{
 
 				HiLog.e(" MotionEvent.ACTION_POINTER_DOWN ");
@@ -809,7 +808,7 @@ public class LiveViewActivity extends HiActivity
 					 * left), HiTools.dip2px(LiveViewActivity.this,bottom),
 					 * HiTools.dip2px(LiveViewActivity.this,width),
 					 * HiTools.dip2px(LiveViewActivity.this,height));
-					 * //ÒÆ¶¯¹ıºó£¬¸üĞÂlastXÓëlastY lastX = move_x; lastY = move_y;
+					 * //ç§»åŠ¨è¿‡åï¼Œæ›´æ–°lastXä¸lastY lastX = move_x; lastY = move_y;
 					 */
 
 					break;
@@ -888,7 +887,7 @@ public class LiveViewActivity extends HiActivity
 
 	private int select_preset = 0;
 
-	// Ô¤ÉèÎ»
+	// é¢„è®¾ä½
 	private void clickPreset(ImageView iv) {
 		@SuppressLint("InflateParams")
 		View customView = getLayoutInflater().inflate(R.layout.popview_preset, null, false);
@@ -980,7 +979,7 @@ public class LiveViewActivity extends HiActivity
 
 	HiChipDefines.HI_P2P_S_DISPLAY display_param = null;
 
-	// ¾µÏñ£¬·­×ªµÄ×ª»»
+	// é•œåƒï¼Œç¿»è½¬çš„è½¬æ¢
 	private void clickMirrorFlip(ImageView iv) {
 
 		if (display_param == null) {
@@ -1089,7 +1088,7 @@ public class LiveViewActivity extends HiActivity
 		}
 	};
 
-	// ÅÄÕÕ£¬±£´æµ½±¾µØÎÄ¼ş¼Ğ :/storage/sdcard1/CamHigh/Snapshot/CameraµÄUID/IMG_+Ê±¼ä+.jpg
+	// æ‹ç…§ï¼Œä¿å­˜åˆ°æœ¬åœ°æ–‡ä»¶å¤¹ :/storage/sdcard1/CamHigh/Snapshot/Cameraçš„UID/IMG_+æ—¶é—´+.jpg
 	private void clickSnapshot() {
 		if (mCamera != null) {
 
@@ -1138,13 +1137,13 @@ public class LiveViewActivity extends HiActivity
 	}
 
 	private void SaveToPhone(String path, String fileName) {
-		// Æä´Î°ÑÎÄ¼ş²åÈëµ½ÏµÍ³Í¼¿â
+		// å…¶æ¬¡æŠŠæ–‡ä»¶æ’å…¥åˆ°ç³»ç»Ÿå›¾åº“
 		try {
 			MediaStore.Images.Media.insertImage(getContentResolver(), path, fileName, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// ×îºóÍ¨ÖªÍ¼¿â¸üĞÂ
+		// æœ€åé€šçŸ¥å›¾åº“æ›´æ–°
 		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + path)));
 
 	}
@@ -1336,7 +1335,7 @@ public class LiveViewActivity extends HiActivity
 
 	}
 
-	// À­½üÀ­Ô¶¾Û½¹µÈ²Ù×÷
+	// æ‹‰è¿‘æ‹‰è¿œèšç„¦ç­‰æ“ä½œ
 	private void clickZoomFocus(ImageView iv) {
 		@SuppressLint("InflateParams")
 		View customView = getLayoutInflater().inflate(R.layout.popview_zoom_focus, null, false);
@@ -1357,7 +1356,7 @@ public class LiveViewActivity extends HiActivity
 
 		mPopupWindow.showAtLocation(iv, 0, location[0] - offsetx, offsety - location[1]);
 
-		// À­½ü²Ù×÷
+		// æ‹‰è¿‘æ“ä½œ
 		Button btnZoomin = (Button) customView.findViewById(R.id.btn_zoomin);
 		btnZoomin.setOnTouchListener(new View.OnTouchListener() {
 
@@ -1378,7 +1377,7 @@ public class LiveViewActivity extends HiActivity
 				return false;
 			}
 		});
-		// À­Ô¶°´Å¥
+		// æ‹‰è¿œæŒ‰é’®
 		Button btnZoomout = (Button) customView.findViewById(R.id.btn_zoomout);
 		btnZoomout.setOnTouchListener(new View.OnTouchListener() {
 
@@ -1398,7 +1397,7 @@ public class LiveViewActivity extends HiActivity
 				return false;
 			}
 		});
-		// ¾Û½¹+
+		// èšç„¦+
 		Button btnFocusin = (Button) customView.findViewById(R.id.btn_focusin);
 		btnFocusin.setOnTouchListener(new View.OnTouchListener() {
 
@@ -1418,7 +1417,7 @@ public class LiveViewActivity extends HiActivity
 				return false;
 			}
 		});
-		// ¾Û½¹-
+		// èšç„¦-
 		Button btnFocusout = (Button) customView.findViewById(R.id.btn_focusout);
 		btnFocusout.setOnTouchListener(new View.OnTouchListener() {
 
@@ -1440,7 +1439,7 @@ public class LiveViewActivity extends HiActivity
 		});
 	}
 
-	// µã»÷Â¼Ïñ°´Å¥£¬±£´æÂ¼ÏñÎÄ¼ş
+	// ç‚¹å‡»å½•åƒæŒ‰é’®ï¼Œä¿å­˜å½•åƒæ–‡ä»¶
 	private void clickRecording(ImageView v) {
 		if (mRecordingState == RECORDING_STATUS_NONE) {
 			mRecordingState = RECORDING_STATUS_LOADING;
@@ -1480,7 +1479,7 @@ public class LiveViewActivity extends HiActivity
 		super.finish();
 	}
 
-	// ½â¾ö¡ª¡ª18EV200 1080P ²»Ö§³Ö×¥Ğ¡Í¼£¬ËùÒÔÒª¸ÄÎª¹ú¿Æ´¦Àí·½Ê½µÄÎÊÌâ¡£
+	// è§£å†³â€”â€”18EV200 1080P ä¸æ”¯æŒæŠ“å°å›¾ï¼Œæ‰€ä»¥è¦æ”¹ä¸ºå›½ç§‘å¤„ç†æ–¹å¼çš„é—®é¢˜ã€‚
 	private static final String DEVICE_18EV200 = "V11.1.8.1.1";
 
 	private boolean is18EV200And1080P() {
@@ -1494,7 +1493,7 @@ public class LiveViewActivity extends HiActivity
 		return false;
 	}
 
-	// µã»÷ÉùÒô°´Å¥¿ªÊ¼¼àÌıÓïÒô£¬°´×¡À®°ÈËµ»°£¬ËÉ¿ª½ÓÊÕ
+	// ç‚¹å‡»å£°éŸ³æŒ‰é’®å¼€å§‹ç›‘å¬è¯­éŸ³ï¼ŒæŒ‰ä½å–‡å­è¯´è¯ï¼Œæ¾å¼€æ¥æ”¶
 	private void clickListen(ImageView iv) {
 		btn_microphone = (Button) findViewById(R.id.btn_microphone);
 		if (isListening) {

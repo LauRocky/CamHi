@@ -1,11 +1,5 @@
 package com.thecamhi.main;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Timer;
-
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,19 +13,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,21 +29,21 @@ import android.widget.TextView;
 
 import com.hichip.R;
 import com.hichip.base.HiLog;
-import com.hichip.content.HiChipDefines;
-import com.hichip.data.HiDeviceInfo;
 import com.hichip.sdk.HiChipSDK;
 import com.hichip.sdk.HiChipSDK.HiChipInitCallback;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
-import com.thecamhi.base.CrashApplication;
 import com.thecamhi.base.DatabaseManager;
-import com.thecamhi.base.HiToast;
 import com.thecamhi.base.HiTools;
 import com.thecamhi.base.LogcatHelper;
 import com.thecamhi.bean.HiDataValue;
 import com.thecamhi.bean.MyCamera;
-import com.thecamhi.bean.MyCamera.OnBindPushResult;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Timer;
 
 public class MainActivity extends FragmentActivity {
 
@@ -87,7 +75,7 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-	// ³õÊ¼»¯SDK
+	// åˆå§‹åŒ–SDK
 	private void initSDK() {
 		initSdkTime = System.currentTimeMillis();
 		HiChipSDK.init(new HiChipInitCallback() {
@@ -111,7 +99,7 @@ public class MainActivity extends FragmentActivity {
 
 	}
 
-	// ´îÔØ4¸öfragment
+	// æ­è½½4ä¸ªfragment
 	private void initTabHost() {
 		String[] tabString = getResources().getStringArray(R.array.tab_name);
 		FragmentTabHost tabHost = (FragmentTabHost) findViewById(R.id.main_fragment_tabhost);
@@ -130,39 +118,39 @@ public class MainActivity extends FragmentActivity {
 
 	private void initXGPushSDK() {
 
-		// ¿ªÆôlogcatÊä³ö£¬·½±ãdebug£¬·¢²¼Ê±Çë¹Ø±Õ
+		// å¼€å¯logcatè¾“å‡ºï¼Œæ–¹ä¾¿debugï¼Œå‘å¸ƒæ—¶è¯·å…³é—­
 		XGPushConfig.enableDebug(this, false);
-		// Èç¹ûĞèÒªÖªµÀ×¢²áÊÇ·ñ³É¹¦£¬ÇëÊ¹ÓÃregisterPush(getApplicationContext(),
-		// XGIOperateCallback)´øcallback°æ±¾
-		// Èç¹ûĞèÒª°ó¶¨ÕËºÅ£¬ÇëÊ¹ÓÃregisterPush(getApplicationContext(),account)°æ±¾
-		// ¾ßÌå¿É²Î¿¼ÏêÏ¸µÄ¿ª·¢Ö¸ÄÏ
-		// ´«µİµÄ²ÎÊıÎªApplicationContext
+		// å¦‚æœéœ€è¦çŸ¥é“æ³¨å†Œæ˜¯å¦æˆåŠŸï¼Œè¯·ä½¿ç”¨registerPush(getApplicationContext(),
+		// XGIOperateCallback)å¸¦callbackç‰ˆæœ¬
+		// å¦‚æœéœ€è¦ç»‘å®šè´¦å·ï¼Œè¯·ä½¿ç”¨registerPush(getApplicationContext(),account)ç‰ˆæœ¬
+		// å…·ä½“å¯å‚è€ƒè¯¦ç»†çš„å¼€å‘æŒ‡å—
+		// ä¼ é€’çš„å‚æ•°ä¸ºApplicationContext
 		// Context context = getApplicationContext();
 		// XGPushManager.registerPush(context);
 
-		// 2.36£¨²»°üÀ¨£©Ö®Ç°µÄ°æ±¾ĞèÒªµ÷ÓÃÒÔÏÂ2ĞĞ´úÂë
+		// 2.36ï¼ˆä¸åŒ…æ‹¬ï¼‰ä¹‹å‰çš„ç‰ˆæœ¬éœ€è¦è°ƒç”¨ä»¥ä¸‹2è¡Œä»£ç 
 		// Intent service = new Intent(context, XGPushService.class);
 		// context.startService(service);
 
-		// ÆäËü³£ÓÃµÄAPI£º
-		// °ó¶¨ÕËºÅ£¨±ğÃû£©×¢²á£ºregisterPush(context,account)»òregisterPush(context,account,
-		// XGIOperateCallback)£¬ÆäÖĞaccountÎªAPPÕËºÅ£¬¿ÉÒÔÎªÈÎÒâ×Ö·û´®£¨qq¡¢openid»òÈÎÒâµÚÈı·½£©£¬ÒµÎñ·½Ò»¶¨Òª×¢ÒâÖÕ¶ËÓëºóÌ¨±£³ÖÒ»ÖÂ¡£
-		// È¡Ïû°ó¶¨ÕËºÅ£¨±ğÃû£©£ºregisterPush(context,"*")£¬¼´account="*"ÎªÈ¡Ïû°ó¶¨£¬½â°óºó£¬¸ÃÕë¶Ô¸ÃÕËºÅµÄÍÆËÍ½«Ê§Ğ§
-		// ·´×¢²á£¨²»ÔÙ½ÓÊÕÏûÏ¢£©£ºunregisterPush(context)
-		// ÉèÖÃ±êÇ©£ºsetTag(context, tagName)
-		// É¾³ı±êÇ©£ºdeleteTag(context, tagName)
+		// å…¶å®ƒå¸¸ç”¨çš„APIï¼š
+		// ç»‘å®šè´¦å·ï¼ˆåˆ«åï¼‰æ³¨å†Œï¼šregisterPush(context,account)æˆ–registerPush(context,account,
+		// XGIOperateCallback)ï¼Œå…¶ä¸­accountä¸ºAPPè´¦å·ï¼Œå¯ä»¥ä¸ºä»»æ„å­—ç¬¦ä¸²ï¼ˆqqã€openidæˆ–ä»»æ„ç¬¬ä¸‰æ–¹ï¼‰ï¼Œä¸šåŠ¡æ–¹ä¸€å®šè¦æ³¨æ„ç»ˆç«¯ä¸åå°ä¿æŒä¸€è‡´ã€‚
+		// å–æ¶ˆç»‘å®šè´¦å·ï¼ˆåˆ«åï¼‰ï¼šregisterPush(context,"*")ï¼Œå³account="*"ä¸ºå–æ¶ˆç»‘å®šï¼Œè§£ç»‘åï¼Œè¯¥é’ˆå¯¹è¯¥è´¦å·çš„æ¨é€å°†å¤±æ•ˆ
+		// åæ³¨å†Œï¼ˆä¸å†æ¥æ”¶æ¶ˆæ¯ï¼‰ï¼šunregisterPush(context)
+		// è®¾ç½®æ ‡ç­¾ï¼šsetTag(context, tagName)
+		// åˆ é™¤æ ‡ç­¾ï¼šdeleteTag(context, tagName)
 		XGPushManager.registerPush(this, new XGIOperateCallback() {
 
 			@Override
 			public void onSuccess(Object data, int flag) {
-				HiLog.e("bruce ×¢²á³É¹¦£¬Éè±¸tokenÎª£º" + data);
+				HiLog.e("bruce æ³¨å†ŒæˆåŠŸï¼Œè®¾å¤‡tokenä¸ºï¼š" + data);
 				String token = (String) data;
 				HiDataValue.XGToken = token;
 			}
 
 			@Override
 			public void onFail(Object data, int errCode, String msg) {
-				HiLog.e("bruce ×¢²áÊ§°Ü£¬Îª£º" + msg);
+				HiLog.e("bruce æ³¨å†Œå¤±è´¥ï¼Œä¸ºï¼š" + msg);
 			}
 		});
 	}
@@ -195,13 +183,13 @@ public class MainActivity extends FragmentActivity {
 		}
 	};
 
-	// »ñÈ¡±¾µØÊı¾İ
+	// è·å–æœ¬åœ°æ•°æ®
 	private void initCamera() {
 		if(HiDataValue.isDebug){
 			PackageManager manager=getPackageManager();
 			try {
 				PackageInfo info=manager.getPackageInfo(getPackageName(), 0);
-				HiLog.e("-------------µ±Ç°°æ±¾ºÅÎª£º------------"+info.versionName);
+				HiLog.e("-------------å½“å‰ç‰ˆæœ¬å·ä¸ºï¼š------------"+info.versionName);
 			} catch (NameNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -286,7 +274,7 @@ public class MainActivity extends FragmentActivity {
 			}
 
 		} catch (Exception e) {
-			// É¾³ısnapshotÊı¾İ;
+			// åˆ é™¤snapshotæ•°æ®;
 			// initCamera();
 		} finally {
 			cursor.close();
@@ -305,7 +293,7 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void requestEnd() {
-		// »ñÈ¡Êı¾İÍê±Ï£¬·¢ËÍ¹ã²¥µ½CameraFragment½çÃæÈ¥Ë¢ĞÂadapter
+		// è·å–æ•°æ®å®Œæ¯•ï¼Œå‘é€å¹¿æ’­åˆ°CameraFragmentç•Œé¢å»åˆ·æ–°adapter
 		Intent intent = new Intent();
 		intent.setAction(HiDataValue.ACTION_CAMERA_INIT_END);
 		sendBroadcast(intent);
@@ -423,9 +411,9 @@ public class MainActivity extends FragmentActivity {
 	 */
 
 	public Bitmap loadImageFromUrl(Context context, MyCamera camera) {
-		// ÊÇ·ñSD¿¨¿ÉÓÃ
+		// æ˜¯å¦SDå¡å¯ç”¨
 		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			// ¼ì²éÊÇ»òÓĞ±£´æÍ¼Æ¬µÄÎÄ¼ş¼Ğ£¬Ã»ÓĞ¾Í´´½¨Ò»¸ö
+			// æ£€æŸ¥æ˜¯æˆ–æœ‰ä¿å­˜å›¾ç‰‡çš„æ–‡ä»¶å¤¹ï¼Œæ²¡æœ‰å°±åˆ›å»ºä¸€ä¸ª
 			String FileUrl = Environment.getExternalStorageDirectory() + "/android/data/"
 					+ context.getResources().getString(R.string.app_name) + "/";
 			File folder = new File(FileUrl);
@@ -433,7 +421,7 @@ public class MainActivity extends FragmentActivity {
 				folder.mkdirs();
 			}
 			File f = new File(FileUrl + camera.getUid());
-			// SD¿¨ÖĞÊÇ·ñÓĞ¸ÃÎÄ¼ş£¬ÓĞÔòÖ±½Ó¶ÁÈ¡·µ»Ø
+			// SDå¡ä¸­æ˜¯å¦æœ‰è¯¥æ–‡ä»¶ï¼Œæœ‰åˆ™ç›´æ¥è¯»å–è¿”å›
 			if (f.exists()) {
 				FileInputStream fis = null;
 				try {

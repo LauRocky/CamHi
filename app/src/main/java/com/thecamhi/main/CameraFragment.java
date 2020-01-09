@@ -1,10 +1,5 @@
 package com.thecamhi.main;
 
-import java.io.File;
-import java.nio.BufferUnderflowException;
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -16,20 +11,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,7 +33,6 @@ import com.hichip.base.HiLog;
 import com.hichip.callback.ICameraIOSessionCallback;
 import com.hichip.content.HiChipDefines;
 import com.hichip.control.HiCamera;
-import com.hichip.data.HiDeviceInfo;
 import com.hichip.tools.Packet;
 import com.tencent.android.tpush.XGLocalMessage;
 import com.tencent.android.tpush.XGPushConfig;
@@ -50,17 +40,19 @@ import com.tencent.android.tpush.XGPushManager;
 import com.thecamhi.activity.AddCameraActivity;
 import com.thecamhi.activity.EditCameraActivity;
 import com.thecamhi.activity.LiveViewActivity;
-import com.thecamhi.activity.setting.AlarmActionActivity;
 import com.thecamhi.activity.setting.AliveSettingActivity;
 import com.thecamhi.base.DatabaseManager;
 import com.thecamhi.base.HiToast;
 import com.thecamhi.base.HiTools;
-
 import com.thecamhi.bean.CamHiDefines;
 import com.thecamhi.bean.CamHiDefines.HI_P2P_ALARM_ADDRESS;
-import com.thecamhi.bean.MyCamera.OnBindPushResult;
 import com.thecamhi.bean.HiDataValue;
 import com.thecamhi.bean.MyCamera;
+import com.thecamhi.bean.MyCamera.OnBindPushResult;
+
+import java.io.File;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CameraFragment extends HiFragment implements ICameraIOSessionCallback {
 	private View layoutView;
@@ -68,10 +60,10 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 	private static final int REQUEST_CODE_CAMERA_EDIT = 1;
 	private static final int REQUEST_CODE_CAMERA_LIVE_VIEW = 2;
 
-	private static final int MOTION_ALARM = 0; // ÒÆ¶¯Õì²â
-	private static final int IO_ALARM = 1; // ÍâÖÃ±¨¾¯
-	private static final int AUDIO_ALARM = 2; // ÉùÒô±¨¾¯
-	private static final int UART_ALARM = 3; // ÍâÖÃ±¨¾¯
+	private static final int MOTION_ALARM = 0; // ç§»åŠ¨ä¾¦æµ‹
+	private static final int IO_ALARM = 1; // å¤–ç½®æŠ¥è­¦
+	private static final int AUDIO_ALARM = 2; // å£°éŸ³æŠ¥è­¦
+	private static final int UART_ALARM = 3; // å¤–ç½®æŠ¥è­¦
 
 	private CameraListAdapter adapter;
 	private CameraBroadcastReceiver receiver;
@@ -435,7 +427,7 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 		}
 	}
 
-	// cameraµÄadapter
+	// cameraçš„adapter
 	public class CameraListAdapter extends BaseAdapter {
 		Context context;
 		private LayoutInflater mInflater;
@@ -722,7 +714,7 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 					}
 						break;
 
-					// ·şÎñÆ÷Ö±ÍÆµÄ»Øµ÷
+					// æœåŠ¡å™¨ç›´æ¨çš„å›è°ƒ
 					case HiChipDefines.HI_P2P_ALARM_EVENT: {
 
 						if (camera.getPushState() == 0) {
@@ -730,7 +722,7 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 						}
 
 						/*
-						 * //Ïà¶ÔÉãÏñ»úÊ±¼äµÄÃ¿30ÃëÒ»´Î»Øµ÷£¬ if(System.currentTimeMillis() -
+						 * //ç›¸å¯¹æ‘„åƒæœºæ—¶é—´çš„æ¯30ç§’ä¸€æ¬¡å›è°ƒï¼Œ if(System.currentTimeMillis() -
 						 * camera.getLastAlarmTime() < 30000) {
 						 * 
 						 * HiLog.e("Time lastAlarmTime:"+(System.
@@ -777,7 +769,7 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 		}
 	};
 
-	// ±¨¾¯ÍÆËÍµ½Í¨ÖªÀ¸
+	// æŠ¥è­¦æ¨é€åˆ°é€šçŸ¥æ 
 	@SuppressWarnings("deprecation")
 	private void showAlarmNotification(MyCamera camera, int evtType, long evtTime) {
 
@@ -865,7 +857,7 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 	}
 
 	protected void sendServer(MyCamera mCamera) {
-//		//²âÊÔ
+//		//æµ‹è¯•
 //		mCamera.sendIOCtrl(CamHiDefines.HI_P2P_ALARM_ADDRESS_GET, null);
 		if (mCamera.getServerData() == null){
 			HiLog.v("bruce save sever ");
@@ -946,45 +938,45 @@ public class CameraFragment extends HiFragment implements ICameraIOSessionCallba
 		String strAlarmType[] = getResources().getStringArray(R.array.tips_alarm_list_array);
 
 		XGLocalMessage local_msg = new XGLocalMessage();
-		// ÉèÖÃ±¾µØÏûÏ¢ÀàĞÍ£¬1:Í¨Öª£¬2:ÏûÏ¢
+		// è®¾ç½®æœ¬åœ°æ¶ˆæ¯ç±»å‹ï¼Œ1:é€šçŸ¥ï¼Œ2:æ¶ˆæ¯
 		local_msg.setType(1);
-		// ÉèÖÃÏûÏ¢±êÌâ
+		// è®¾ç½®æ¶ˆæ¯æ ‡é¢˜
 		local_msg.setTitle(uid);
-		// ÉèÖÃÏûÏ¢ÄÚÈİ
+		// è®¾ç½®æ¶ˆæ¯å†…å®¹
 
 		if (type < strAlarmType.length && type >= 0)
 			local_msg.setContent(strAlarmType[type]);
-		// ÉèÖÃÏûÏ¢ÈÕÆÚ£¬¸ñÊ½Îª£º20140502
+		// è®¾ç½®æ¶ˆæ¯æ—¥æœŸï¼Œæ ¼å¼ä¸ºï¼š20140502
 		// local_msg.setDate("20140930");
-		// ÉèÖÃÏûÏ¢´¥·¢µÄĞ¡Ê±(24Ğ¡Ê±ÖÆ)£¬ÀıÈç£º22´ú±íÍíÉÏ10µã
+		// è®¾ç½®æ¶ˆæ¯è§¦å‘çš„å°æ—¶(24å°æ—¶åˆ¶)ï¼Œä¾‹å¦‚ï¼š22ä»£è¡¨æ™šä¸Š10ç‚¹
 		// local_msg.setHour("14");
-		// »ñÈ¡ÏûÏ¢´¥·¢µÄ·ÖÖÓ£¬ÀıÈç£º05´ú±í05·Ö
+		// è·å–æ¶ˆæ¯è§¦å‘çš„åˆ†é’Ÿï¼Œä¾‹å¦‚ï¼š05ä»£è¡¨05åˆ†
 		// local_msg.setMin("16");
-		// ÉèÖÃÏûÏ¢ÑùÊ½£¬Ä¬ÈÏÎª0»ò²»ÉèÖÃ
+		// è®¾ç½®æ¶ˆæ¯æ ·å¼ï¼Œé»˜è®¤ä¸º0æˆ–ä¸è®¾ç½®
 		// local_msg.setBuilderId(6);
-		// ÉèÖÃÀ­ÆğÓ¦ÓÃÒ³Ãæ
+		// è®¾ç½®æ‹‰èµ·åº”ç”¨é¡µé¢
 		// local_msg.setActivity("com.qq.xgdemo.SettingActivity");
-		// ÉèÖÃ¶¯×÷ÀàĞÍ£º1´ò¿ªactivity»òapp±¾Éí£¬2´ò¿ªä¯ÀÀÆ÷£¬3´ò¿ªIntent £¬4Í¨¹ı°üÃû´ò¿ªÓ¦ÓÃ
+		// è®¾ç½®åŠ¨ä½œç±»å‹ï¼š1æ‰“å¼€activityæˆ–appæœ¬èº«ï¼Œ2æ‰“å¼€æµè§ˆå™¨ï¼Œ3æ‰“å¼€Intent ï¼Œ4é€šè¿‡åŒ…åæ‰“å¼€åº”ç”¨
 		// local_msg.setAction_type(1);
-		// ÉèÖÃURL
+		// è®¾ç½®URL
 		// local_msg.setUrl("http://www.baidu.com");
-		// ÉèÖÃIntent
+		// è®¾ç½®Intent
 		// local_msg.setIntent("intent:10086#Intent;scheme=tel;action=android.intent.action.DIAL;S.key=value;end");
-		// ×Ô¶¨Òå±¾µØÍ¨ÖªÑùÊ½
+		// è‡ªå®šä¹‰æœ¬åœ°é€šçŸ¥æ ·å¼
 		// local_msg.setIcon_type(0);
 		// local_msg.setIcon_res("right");
-		// ÊÇ·ñ¸²¸ÇÔ­ÏÈbuild_idµÄ±£´æÉèÖÃ¡£1¸²¸Ç£¬0²»¸²¸Ç
+		// æ˜¯å¦è¦†ç›–åŸå…ˆbuild_idçš„ä¿å­˜è®¾ç½®ã€‚1è¦†ç›–ï¼Œ0ä¸è¦†ç›–
 		// local_msg.setStyle_id(1);
-		// ÉèÖÃÒôÆµ×ÊÔ´
+		// è®¾ç½®éŸ³é¢‘èµ„æº
 		// local_msg.setRing_raw("mm");
-		// ÉèÖÃkey,value
+		// è®¾ç½®key,value
 		// HashMap<String, Object> map = new HashMap<String, Object>();
 		// map.put("key", "v1");
 		// map.put("key2", "v2");
 		// local_msg.setCustomContent(map);
-		// ÉèÖÃÏÂÔØÓ¦ÓÃURL
+		// è®¾ç½®ä¸‹è½½åº”ç”¨URL
 		// local_msg.setPackageDownloadUrl("http://softfile.3g.qq.com:8080/msoft/179/1105/10753/MobileQQ1.0(Android)_Build0198.apk");
-		// ÉèÖÃÒª´ò¿ªµÄÓ¦ÓÃ°üÃû
+		// è®¾ç½®è¦æ‰“å¼€çš„åº”ç”¨åŒ…å
 		// local_msg.setPackageName("com.example.com.qq.feedback");
 		XGPushManager.addLocalNotification(getActivity(), local_msg);
 	}
